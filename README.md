@@ -3,13 +3,24 @@
 Tap the **Super** key by itself and get a searchable grid of every installed
 app — press it again (or Escape / click outside) to close. Start typing to
 filter, use the arrow keys, Page Up/Down, and Enter, or click an icon to
-launch it. Delete asks to uninstall the selected app — same confirmation
-flow as the Omarchy menu's own Apps submenu.
+launch it.
 
 It's an [Omarchy](https://omarchy.org/) Quattro shell plugin: a fullscreen
 overlay that reuses Omarchy's own app library, so it shares the same icons,
 launch behavior, and menu theming as the built-in Apps menu — just bound to
 a single key.
+
+## Uninstalling an app from the grid
+
+Select an app and press **Delete**. You'll get a confirmation prompt —
+"Do you want to uninstall X?" — before anything happens; Escape or clicking
+Cancel backs out with no changes.
+
+This is a real uninstall, not just hiding the icon: confirming runs
+`omarchy-remove-launcher-entry`, the same sudo-gated helper the built-in
+Omarchy menu's own Apps submenu uses when you delete an app from there, so
+it may prompt for your password. It's exactly the native menu's own
+delete flow, just reachable from this grid too.
 
 
 

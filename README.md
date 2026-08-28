@@ -9,6 +9,12 @@ overlay that reuses Omarchy's own app library, so it shares the same icons,
 launch behavior, and menu theming as the built-in Apps menu — just bound to
 a single key.
 
+
+
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/2bdb42ee-cd68-4f32-b81c-8adfde82f6cc" />
+
+
+
 ## Install
 
 ```

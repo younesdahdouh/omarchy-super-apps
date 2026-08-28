@@ -27,8 +27,8 @@ Or clone manually into `~/.config/omarchy/plugins/`:
 
 ```
 git clone https://github.com/younesdahdouh/omarchy-super-apps.git \
-  ~/.config/omarchy/plugins/io.github.younesdahdouh.super-apps
-omarchy plugin enable io.github.younesdahdouh.super-apps
+  ~/.config/omarchy/plugins/super-apps
+omarchy plugin enable super-apps
 ```
 
 ## Bind it to the Super key
@@ -36,7 +36,7 @@ omarchy plugin enable io.github.younesdahdouh.super-apps
 Add this to `~/.config/hypr/bindings.lua`:
 
 ```lua
-o.bind("SUPER + SUPER_L", "All apps", "omarchy-shell shell toggle io.github.younesdahdouh.super-apps", { release = true })
+o.bind("SUPER + SUPER_L", "All apps", "omarchy-shell shell toggle super-apps", { release = true })
 ```
 
 `{ release = true }` is the same option Omarchy's own push-to-talk binding
@@ -52,19 +52,19 @@ open right after a workspace switch. If that bothers you, bind a combo
 instead, e.g. `SUPER + SPACE`:
 
 ```
-o.bind("SUPER + SPACE", "All apps", "omarchy-shell shell toggle io.github.younesdahdouh.super-apps")
+o.bind("SUPER + SPACE", "All apps", "omarchy-shell shell toggle super-apps")
 ```
 
 You can always trigger it by hand too:
 
 ```
-omarchy-shell shell toggle io.github.younesdahdouh.super-apps
+omarchy-shell shell toggle super-apps
 ```
 
 ## Uninstall
 
 ```
-omarchy plugin remove io.github.younesdahdouh.super-apps
+omarchy plugin remove super-apps
 ```
 
 Then remove the binding you added to `~/.config/hypr/bindings.lua`.

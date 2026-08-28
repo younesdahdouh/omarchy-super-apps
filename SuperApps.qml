@@ -67,6 +67,23 @@ Item {
     else root.open("{}")
   }
 
+  // Desktop-entry names are untrusted input (anything on disk with a
+  // .desktop file gets read and displayed) and land in plain qs.Ui Text
+  // items, which default to Text.AutoText — Qt's rich-text sniffer can
+  // upgrade a name that merely looks like markup into StyledText/RichText,
+  // capable of e.g. an <img src=...> triggering an automatic network
+  // fetch. Every Text element rendering a label also sets
+  // textFormat: Text.PlainText as the real fix (that's what actually
+  // disables the sniffer); this additionally caps length and strips
+  // control characters before the name ever enters the model, so a
+  // pathological entry can't blow up layout either.
+  function sanitizeLabel(value) {
+    var s = String(value || "").replace(/[\x00-\x1f\x7f]/g, " ").trim()
+    var maxLength = 80
+    if (s.length > maxLength) s = s.slice(0, maxLength) + "…"
+    return s
+  }
+
   function rebuildDisplay() {
     displayModel.clear()
     if (!root.appLibrary) return
@@ -78,7 +95,7 @@ Item {
       if (!appId) continue
       displayModel.append({
         appId: appId,
-        label: root.appLibrary.entryName(entry),
+        label: root.sanitizeLabel(root.appLibrary.entryName(entry)),
         appIcon: String(entry.icon || "")
       })
     }
@@ -291,6 +308,7 @@ Item {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             text: root.filterText || "All apps — start typing to search…"
+            textFormat: Text.PlainText
             color: root.foreground
             opacity: root.filterText ? 1 : 0.58
             font.family: root.fontFamily
@@ -344,6 +362,7 @@ Item {
                 Text {
                   width: parent.width
                   text: label
+                  textFormat: Text.PlainText
                   color: hasCursor ? root.selectedText : root.foreground
                   horizontalAlignment: Text.AlignHCenter
                   elide: Text.ElideRight
@@ -378,6 +397,7 @@ Item {
 
             Text {
               text: "No matches for “" + root.filterText + "”"
+              textFormat: Text.PlainText
               color: root.foreground
               opacity: 0.7
               font.family: root.fontFamily

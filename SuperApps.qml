@@ -30,17 +30,25 @@ Item {
   property color selectedBackground: Color.menu.selectedBackground
   property color selectedText: Color.menu.selectedText
   readonly property int cornerRadius: Style.cornerRadius
-  property string fontFamily: Style.font.menuFamily
+  // Same family binding as the Keybind Manager panel, rather than the
+  // [menu] surface's own menuFamily token — the two only differ if the
+  // user has set OMARCHY_MENU_FONT, and this plugin should match its
+  // sibling panel regardless of that override.
+  property string fontFamily: Style.font.family
   property int contentMargin: Style.spacing.panelPadding
   property int headerHeight: Math.max(Style.space(34), Style.font.title + Style.spacing.controlPaddingY * 2)
   property int contentSpacing: Style.spacing.md
   property int cardWidth: Math.min(Style.space(640), panel.width - Style.gapsOut * 2)
   property int cardHeight: Math.min(Style.space(560), panel.height - Style.gapsOut * 2)
 
-  property int cellWidth: Style.space(112)
+  // Minimum cell width used only to decide how many columns fit — the
+  // GridView's actual cellWidth (below) divides the real available width
+  // evenly by that column count, so there's never leftover space
+  // stranded on the right edge.
+  property int cellMinWidth: Style.space(112)
   property int cellHeight: Style.space(104)
   property int iconSize: Style.space(48)
-  property int columns: Math.max(1, Math.floor((cardWidth - contentMargin * 2) / cellWidth))
+  property int columns: Math.max(1, Math.floor((cardWidth - contentMargin * 2) / cellMinWidth))
 
   function open(payloadJson) {
     root.opened = true
@@ -307,7 +315,8 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            text: root.filterText || "All apps — start typing to search…"
+            horizontalAlignment: Text.AlignHCenter
+            text: root.filterText || "Type to search…"
             textFormat: Text.PlainText
             color: root.foreground
             opacity: root.filterText ? 1 : 0.58
@@ -326,7 +335,7 @@ Item {
             anchors.fill: parent
             model: displayModel
             clip: true
-            cellWidth: root.cellWidth
+            cellWidth: width / root.columns
             cellHeight: root.cellHeight
             boundsBehavior: Flickable.StopAtBounds
 
@@ -338,7 +347,7 @@ Item {
 
               readonly property bool hasCursor: root.cursorActive && index === root.selectedIndex
 
-              width: root.cellWidth
+              width: appGrid.cellWidth
               height: root.cellHeight
               radius: root.cornerRadius
               color: hasCursor ? root.selectedBackground : "transparent"

@@ -2,7 +2,9 @@
 
 Tap the **Super** key by itself and get a searchable grid of every installed
 app — press it again (or Escape / click outside) to close. Start typing to
-filter, use the arrow keys and Enter, or click an icon to launch it.
+filter, use the arrow keys, Page Up/Down, and Enter, or click an icon to
+launch it. Delete asks to uninstall the selected app — same confirmation
+flow as the Omarchy menu's own Apps submenu.
 
 It's an [Omarchy](https://omarchy.org/) Quattro shell plugin: a fullscreen
 overlay that reuses Omarchy's own app library, so it shares the same icons,

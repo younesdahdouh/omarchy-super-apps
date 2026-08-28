@@ -17,6 +17,8 @@ Item {
   property string filterText: ""
   property int selectedIndex: 0
   property bool cursorActive: false
+  property var deleteTarget: null
+  property bool deleteConfirmOpen: false
 
   // Shares the [menu] surface tokens so any theme that styles the Omarchy
   // menu also styles this grid without extra work.
@@ -116,6 +118,51 @@ Item {
     appGrid.positionViewAtIndex(selectedIndex, GridView.Contain)
   }
 
+  // Same page-jump math as the Emojis overlay's own selectPage(): a "page"
+  // is however many full rows currently fit in the grid's viewport, so it
+  // stays correct across window sizes instead of a fixed row count.
+  function selectPage(delta) {
+    if (displayModel.count === 0) return
+    if (!cursorActive) {
+      cursorActive = true
+      selectedIndex = delta < 0 ? displayModel.count - 1 : 0
+      appGrid.positionViewAtIndex(selectedIndex, GridView.Contain)
+      return
+    }
+    var visibleRows = Math.max(1, Math.floor(appGrid.height / root.cellHeight))
+    var newIndex = selectedIndex + delta * root.columns * visibleRows
+    if (newIndex < 0) newIndex = 0
+    if (newIndex >= displayModel.count) newIndex = displayModel.count - 1
+    selectedIndex = newIndex
+    appGrid.positionViewAtIndex(selectedIndex, GridView.Contain)
+  }
+
+  // Same flow as the Omarchy menu's own Apps submenu: Delete asks for
+  // confirmation, then hands off to appLibrary.remove() (which requires
+  // sudo — see omarchy-remove-launcher-entry) so this genuinely uninstalls
+  // the package, not just hides the launcher entry.
+  function requestDeleteSelected() {
+    if (!root.cursorActive || root.selectedIndex < 0 || root.selectedIndex >= displayModel.count) return
+    var row = displayModel.get(root.selectedIndex)
+    root.deleteTarget = { appId: row.appId, label: row.label }
+    deleteConfirm.selectedIndex = 1
+    root.deleteConfirmOpen = true
+  }
+
+  function cancelDelete() {
+    root.deleteConfirmOpen = false
+    root.deleteTarget = null
+    Qt.callLater(function() { keyCatcher.forceActiveFocus() })
+  }
+
+  function confirmDelete() {
+    var target = root.deleteTarget
+    root.deleteConfirmOpen = false
+    root.deleteTarget = null
+    if (!target || !root.appLibrary) return
+    root.appLibrary.remove(target.appId, target.label)
+  }
+
   function setFilter(nextFilter) {
     root.filterText = nextFilter
     root.selectedIndex = 0
@@ -181,9 +228,17 @@ Item {
 
         Keys.priority: Keys.BeforeItem
         Keys.onPressed: function(event) {
+          if (root.deleteConfirmOpen) {
+            if (deleteConfirm.handleKey(event)) event.accepted = true
+            return
+          }
+
           if (event.key === Qt.Key_Escape) {
             if (root.filterText) root.setFilter("")
             else root.dismiss()
+            event.accepted = true
+          } else if (event.key === Qt.Key_Delete) {
+            root.requestDeleteSelected()
             event.accepted = true
           } else if (Util.editsFilter(event, root.filterText)) {
             root.setFilter(Util.editedFilter(event, root.filterText))
@@ -199,6 +254,12 @@ Item {
             event.accepted = true
           } else if (event.key === Qt.Key_Down) {
             root.selectRow(1)
+            event.accepted = true
+          } else if (event.key === Qt.Key_PageUp) {
+            root.selectPage(-1)
+            event.accepted = true
+          } else if (event.key === Qt.Key_PageDown) {
+            root.selectPage(1)
             event.accepted = true
           } else if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
             if (root.cursorActive) root.activateIndex(root.selectedIndex)
@@ -326,6 +387,23 @@ Item {
             }
           }
         }
+      }
+
+      ConfirmDialog {
+        id: deleteConfirm
+        anchors.fill: parent
+        opened: root.deleteConfirmOpen
+        message: "Do you want to uninstall " + ((root.deleteTarget && root.deleteTarget.label) || "") + "?"
+        confirmText: "Uninstall"
+        background: root.background
+        foreground: root.foreground
+        scrim: root.scrim
+        selectedBackground: root.selectedBackground
+        selectedText: root.selectedText
+        fontFamily: root.fontFamily
+        cornerRadius: root.cornerRadius
+        onCanceled: root.cancelDelete()
+        onConfirmed: root.confirmDelete()
       }
     }
   }

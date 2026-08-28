@@ -22,9 +22,8 @@ Omarchy menu's own Apps submenu uses when you delete an app from there, so
 it may prompt for your password. It's exactly the native menu's own
 delete flow, just reachable from this grid too.
 
-
-
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/2bdb42ee-cd68-4f32-b81c-8adfde82f6cc" />
+<p align="center">
+<img width="727" height="604" alt="screenshot-2026-08-28_22-28-51" src="https://github.com/user-attachments/assets/b0934931-3c15-425c-96b4-a0f0cd69998b" />
 
 
 
@@ -60,17 +59,29 @@ Super work as a toggle.
 `SUPER + TAB` — not only a standalone tap. This is standard behavior for
 "press Super to open the launcher" setups on Hyprland; it can pop the grid
 open right after a workspace switch. If that bothers you, bind a combo
-instead, e.g. `SUPER + SPACE`:
-
-```
-o.bind("SUPER + SPACE", "All apps", "omarchy-shell shell toggle super-apps")
-```
+instead.
 
 You can always trigger it by hand too:
 
 ```
 omarchy-shell shell toggle super-apps
 ```
+## Uninstalling an app from the grid
+
+Select an app and press **Delete**. You'll get a confirmation prompt —
+"Do you want to uninstall X?" — before anything happens; Escape or clicking
+Cancel backs out with no changes.
+
+This is a real uninstall, not just hiding the icon: confirming runs
+`omarchy-remove-launcher-entry`, the same sudo-gated helper the built-in
+Omarchy menu's own Apps submenu uses when you delete an app from there, so
+it may prompt for your password. It's exactly the native menu's own
+delete flow, just reachable from this grid too.
+
+<p align="center">
+<img width="1030" height="900" alt="screenshot-2026-08-28_22-30-22" src="https://github.com/user-attachments/assets/de7dca0f-bea6-47f2-918e-624138e7971d" />
+
+
 
 ## Uninstall
 

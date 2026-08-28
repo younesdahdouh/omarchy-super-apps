@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.younesdahdouh.super-apps",
+  "name": "Super Apps",
+  "version": "1.0.0",
+  "author": "Younes Dahdouh",
+  "description": "Tap the Super key alone to see every installed app in a grid you can search and launch",
+  "kinds": [
+    "overlay"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "overlay": "SuperApps.qml"
+  }
+}

@@ -48,8 +48,11 @@ Super work as a toggle.
 `SUPER + TAB` — not only a standalone tap. This is standard behavior for
 "press Super to open the launcher" setups on Hyprland; it can pop the grid
 open right after a workspace switch. If that bothers you, bind a combo
-instead.
+instead or another key like TAB instead.
 
+```lua
+o.bind("TAB", "All apps", "omarchy-shell shell toggle super-apps", { release = true })
+```
 You can always trigger it by hand too:
 
 ```

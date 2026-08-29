@@ -51,7 +51,7 @@ open right after a workspace switch. If that bothers you, bind a combo
 instead or another key like TAB instead.
 
 ```lua
-o.bind("TAB", "All apps", "omarchy-shell shell toggle super-apps", { release = true })
+o.bind("CTRL + TAB", "All apps", "omarchy-shell shell toggle super-apps", { release = true })
 ```
 You can always trigger it by hand too:
 

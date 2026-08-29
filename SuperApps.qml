@@ -92,6 +92,14 @@ Item {
     return s
   }
 
+  // ConfirmDialog.message is rendered by the shared shell component's own
+  // Text item, which this plugin doesn't control and which does not force
+  // Text.PlainText — so a markup-shaped label could still be sniffed as
+  // rich text there. Escape it separately before interpolating.
+  function escapeMarkup(value) {
+    return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  }
+
   function rebuildDisplay() {
     displayModel.clear()
     if (!root.appLibrary) return
@@ -422,7 +430,7 @@ Item {
         id: deleteConfirm
         anchors.fill: parent
         opened: root.deleteConfirmOpen
-        message: "Do you want to uninstall " + ((root.deleteTarget && root.deleteTarget.label) || "") + "?"
+        message: "Do you want to uninstall " + root.escapeMarkup((root.deleteTarget && root.deleteTarget.label) || "") + "?"
         confirmText: "Uninstall"
         background: root.background
         foreground: root.foreground

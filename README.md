@@ -4,6 +4,7 @@ Tap the **Super** key by itself and get a searchable grid of every installed
 app — press it again (or Escape / click outside) to close. Start typing to
 filter, use the arrow keys, Page Up/Down, and Enter, or click an icon to
 launch it.
+AND uninstall any app by simply pressing **Delete**  
 
 It's an [Omarchy](https://omarchy.org/) Quattro shell plugin: a fullscreen
 overlay that reuses Omarchy's own app library, so it shares the same icons,
